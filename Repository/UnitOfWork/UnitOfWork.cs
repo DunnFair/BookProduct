@@ -3,34 +3,36 @@
     using BookProduct.Repository.Data;
     using BookProduct.Repository.IRepository;
     using Microsoft.EntityFrameworkCore;
+    using System.Collections;
     using System.Collections.Concurrent;
 
     public class UnitOfWork:IUnitOfWork
     {
-        private readonly ConcurrentDictionary<Type, object> _repositories = new();
-        private readonly DbContext _dbContext;
+        //private readonly ConcurrentDictionary<Type, object> _repositories = new();
+        private readonly ApplicationDbContext _dbContext;
+        private Hashtable _repositories;
 
-        public UnitOfWork(DbContext dbContext)
+        public UnitOfWork(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public IEFRepository<T>? Repository<T>() where T : class
+        public IEFRepository<T> Repository<T>() where T : class
         {
-            return _repositories.GetOrAdd(typeof(T), _ =>
+            if (_repositories == null)
             {
-                try
-                {
-                    var repositoryType = typeof(IEFRepository<>).MakeGenericType(typeof(T));
-                    return (IEFRepository<T>)Activator.CreateInstance(repositoryType, _dbContext);
-                }
-                catch (Exception ex)
-                {
-                    // 處理異常，例如記錄錯誤或拋出自定義異常
-                    Console.Error.WriteLine($"Failed to create repository for {typeof(T).Name}: {ex.Message}");
-                    throw; 
-                }
-            }) as IEFRepository<T>;
+                _repositories = new Hashtable();
+            }
+
+            string name = typeof(T).Name;
+            if (!_repositories.ContainsKey(name))
+            {
+                Type typeFromHandle = typeof(EFRepository<>);
+                object value = Activator.CreateInstance(typeFromHandle.MakeGenericType(typeof(T)), _dbContext);
+                _repositories.Add(name, value);
+            }
+
+            return (IEFRepository<T>)_repositories[name];
         }
     }
 
