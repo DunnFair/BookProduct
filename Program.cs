@@ -3,6 +3,7 @@ using BookProduct.Repository.Data;
 using BookProduct.Repository.IRepository;
 using BookProduct.Repository.UnitOfWork;
 using BookProduct.Service;
+using BookProduct.Utils.AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddAutoMapper(typeof(OrganizationProfile));
 
 var app = builder.Build();
 

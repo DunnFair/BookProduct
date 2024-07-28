@@ -1,4 +1,5 @@
-﻿using BookProduct.Service;
+﻿using AutoMapper;
+using BookProduct.Service;
 using BookProduct.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +10,11 @@ namespace BookProduct.Controllers
     public class ProductController:ControllerBase
     {
         private readonly IProductService _productService;
-        public ProductController(IProductService productService)
+        private readonly IMapper _mapper;
+        public ProductController(IProductService productService,IMapper mapper)
         {
             _productService = productService;
+            _mapper = mapper;
         }
         /// <summary>
         /// 取得所有產品
@@ -22,17 +25,7 @@ namespace BookProduct.Controllers
         public IEnumerable<ProductViewModel> GetProducts()
         {
             var data = _productService.Get();
-            List<ProductViewModel> products = new List<ProductViewModel>();
-            foreach (var item in data)
-            {
-                ProductViewModel productViewModel = new ProductViewModel();
-                productViewModel.Author = item.Author;
-                productViewModel.Id = item.Id;
-                productViewModel.Description = item.Description;
-                productViewModel.Title = item.Title;
-                products.Add(productViewModel);
-            }
-            return products;
+            return _mapper.Map<List<ProductViewModel>>(data);
         }
     }
 }
