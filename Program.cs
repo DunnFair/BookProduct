@@ -17,6 +17,22 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnention")));
 
+
+builder.Services.AddCors(options =>
+{
+    // CorsPolicy 是自訂的 Policy 名稱
+    options.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyOrigin();
+              
+    });
+});
+
+builder.Services.AddMvc().AddJsonOptions(o =>
+{
+    o.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
+
 builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -37,5 +53,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("CorsPolicy");
 
 app.Run();
