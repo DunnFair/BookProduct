@@ -99,7 +99,7 @@ namespace BookProduct.Repository
                 throw new ArgumentNullException("entity");
             }
 
-            _dbContext.Entry(entity).State |= EntityState.Modified;
+            _dbContext.Set<TEntity>().Update(entity);
             _dbContext.SaveChanges();
         }
         /// <summary>
