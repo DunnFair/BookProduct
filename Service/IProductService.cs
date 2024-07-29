@@ -18,7 +18,7 @@ namespace BookProduct.Service
         /// 更新多筆產品
         /// </summary>
         /// <param name="product"></param>
-        void Update(Product product);
+        void Update(int Id);
         /// <summary>
         /// 更新多筆產品
         /// </summary>
@@ -28,7 +28,7 @@ namespace BookProduct.Service
         /// 刪除單筆
         /// </summary>
         /// <param name="product"></param>
-        void Delete(Product product);
+        void Delete(int Id);
         /// <summary>
         /// 刪除多筆
         /// </summary>

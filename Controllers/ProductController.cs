@@ -8,11 +8,11 @@ namespace BookProduct.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController:ControllerBase
+    public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
         private readonly IMapper _mapper;
-        public ProductController(IProductService productService,IMapper mapper)
+        public ProductController(IProductService productService, IMapper mapper)
         {
             _productService = productService;
             _mapper = mapper;
@@ -23,10 +23,10 @@ namespace BookProduct.Controllers
         /// <returns></returns>
         /// 
         [HttpGet]
-        public IEnumerable<ProductViewModel> Get()
+        public IActionResult GetProducts()
         {
             var data = _productService.Get();
-            return _mapper.Map<List<ProductViewModel>>(data);
+            return Ok(_mapper.Map<List<ProductViewModel>>(data));
         }
 
         /// <summary>
@@ -34,47 +34,55 @@ namespace BookProduct.Controllers
         /// </summary>
         /// <returns></returns>
         /// 
-        [HttpGet]
-        public ProductViewModel Get(int Id)
+        [HttpGet("{Id}")]
+        public IActionResult GetProduct(int Id)
         {
             var data = _productService.GetFirstOrDefault(Id);
-            return _mapper.Map<ProductViewModel>(data);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return Ok(_mapper.Map<ProductViewModel>(data));
         }
         /// <summary>
         /// 更新單筆產品
         /// </summary>
         /// <param name="product"></param>
-        [HttpPost]
-        public void Update(Product product)
+        [HttpPut("{Id}")]
+        public IActionResult UpdateProduct(int Id)
         {
-            _productService.Update(product);
+            _productService.Update(Id);
+            return NoContent();
         }
         /// <summary>
         /// 更新多筆產品
         /// </summary>
         /// <param name="products"></param>
-        [HttpPost]
-        public void Update(IEnumerable<Product> products)
+        [HttpPut]
+        public IActionResult UpdateProducts(IEnumerable<Product> products)
         {
             _productService.UpdateRange(products);
+            return NoContent();
         }
         /// <summary>
         /// 刪除單筆產品
         /// </summary>
         /// <param name="product"></param>
-        [HttpPost]
-        public void Delete(Product product)
+        [HttpDelete("{Id}")]
+        public IActionResult DeleteProduct(int Id)
         {
-            _productService.Delete(product);
+            _productService.Delete(Id);
+            return NoContent();
         }
         /// <summary>
         /// 刪除多筆產品
         /// </summary>
         /// <param name="products"></param>
-        [HttpPost]
-        public void Delete(IEnumerable<Product> products)
+        [HttpDelete]
+        public IActionResult DeleteProducts(IEnumerable<Product> products)
         {
             _productService.DeleteRange(products);
+            return NoContent();
         }
     }
 }

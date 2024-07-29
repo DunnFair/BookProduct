@@ -43,9 +43,14 @@ namespace BookProduct.Service
         /// 更新多筆產品
         /// </summary>
         /// <param name="product"></param>
-        public void Update(Product product)
+        public void Update(int Id)
         {
-            _unitOfWork.Repository<Product>().Update(product);
+            var data = _unitOfWork.Repository<Product>().GetAll().Where(o => o.Id == Id).SingleOrDefault();
+            if (data != null)
+            {
+                _unitOfWork.Repository<Product>().Update(data);
+            }
+            
         }
 
         /// <summary>
@@ -61,9 +66,14 @@ namespace BookProduct.Service
         /// 刪除單筆
         /// </summary>
         /// <param name="product"></param>
-        public void Delete(Product product)
+        public void Delete(int Id)
         {
-            _unitOfWork.Repository<Product>().Remove(product);
+            var data = _unitOfWork.Repository<Product>().GetAll().Where(o => o.Id == Id).SingleOrDefault();
+            if (data != null)
+            {
+                _unitOfWork.Repository<Product>().Remove(data);
+            }
+            
         }
 
         /// <summary>
