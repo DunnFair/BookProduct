@@ -1,3 +1,5 @@
+using Autofac;
+using BookProduct.AutoFac;
 using BookProduct.Repository;
 using BookProduct.Repository.Data;
 using BookProduct.Repository.IRepository;
@@ -5,6 +7,7 @@ using BookProduct.Repository.UnitOfWork;
 using BookProduct.Service;
 using BookProduct.Utils.AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,11 +36,13 @@ builder.Services.AddMvc().AddJsonOptions(o =>
     o.JsonSerializerOptions.PropertyNamingPolicy = null;
 });
 
-builder.Services.AddScoped<IProductService, ProductService>();
+//builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddAutoMapper(typeof(OrganizationProfile));
+
+builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutoFacModuleRegister()));
 
 var app = builder.Build();
 
