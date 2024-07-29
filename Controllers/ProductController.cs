@@ -48,17 +48,17 @@ namespace BookProduct.Controllers
         /// 更新單筆產品
         /// </summary>
         /// <param name="product"></param>
-        [HttpPut("{Id}")]
-        public IActionResult UpdateProduct(int Id)
+        [HttpPut]
+        public IActionResult UpdateProduct(Product product)
         {
-            _productService.Update(Id);
+            _productService.Update(product);
             return NoContent();
         }
         /// <summary>
         /// 更新多筆產品
         /// </summary>
         /// <param name="products"></param>
-        [HttpPut]
+        [HttpPost]
         public IActionResult UpdateProducts(IEnumerable<Product> products)
         {
             _productService.UpdateRange(products);

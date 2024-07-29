@@ -37,20 +37,16 @@ namespace BookProduct.Service
             {
                 return new Product();
             }
-            
+
         }
         /// <summary>
-        /// 更新多筆產品
+        /// 更新單筆產品
         /// </summary>
         /// <param name="product"></param>
-        public void Update(int Id)
+        public void Update(Product product)
         {
-            var data = _unitOfWork.Repository<Product>().GetAll().Where(o => o.Id == Id).SingleOrDefault();
-            if (data != null)
-            {
-                _unitOfWork.Repository<Product>().Update(data);
-            }
-            
+            _unitOfWork.Repository<Product>().Update(product);
+
         }
 
         /// <summary>
@@ -73,7 +69,7 @@ namespace BookProduct.Service
             {
                 _unitOfWork.Repository<Product>().Remove(data);
             }
-            
+
         }
 
         /// <summary>

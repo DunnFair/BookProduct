@@ -15,10 +15,10 @@ namespace BookProduct.Service
         /// <returns></returns>
         Product GetFirstOrDefault(int Id);
         /// <summary>
-        /// 更新多筆產品
+        /// 更新單筆產品
         /// </summary>
         /// <param name="product"></param>
-        void Update(int Id);
+        void Update(Product product);
         /// <summary>
         /// 更新多筆產品
         /// </summary>
