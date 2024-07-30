@@ -1,4 +1,5 @@
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using BookProduct.AutoFac;
 using BookProduct.Repository;
 using BookProduct.Repository.Data;
@@ -36,13 +37,17 @@ builder.Services.AddMvc().AddJsonOptions(o =>
     o.JsonSerializerOptions.PropertyNamingPolicy = null;
 });
 
-builder.Services.AddScoped<IProductService, ProductService>();
+//builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddAutoMapper(typeof(OrganizationProfile));
 
-//builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutoFacModuleRegister()));
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+{
+    containerBuilder.RegisterModule(new AutoFacModuleRegister());
+});
 
 var app = builder.Build();
 
