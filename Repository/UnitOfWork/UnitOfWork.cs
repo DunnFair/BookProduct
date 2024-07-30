@@ -8,7 +8,6 @@
 
     public class UnitOfWork:IUnitOfWork
     {
-        //private readonly ConcurrentDictionary<Type, object> _repositories = new();
         private readonly ApplicationDbContext _dbContext;
         private Hashtable _repositories;
 
@@ -19,12 +18,15 @@
 
         public IEFRepository<T> Repository<T>() where T : class
         {
+            ///Hashtable容器初始化
             if (_repositories == null)
             {
                 _repositories = new Hashtable();
             }
 
+            ///獲取傳入Class的名稱
             string name = typeof(T).Name;
+            ///如果_repositories 沒有包含傳入的Class Name那就創建一個實例
             if (!_repositories.ContainsKey(name))
             {
                 Type typeFromHandle = typeof(EFRepository<>);

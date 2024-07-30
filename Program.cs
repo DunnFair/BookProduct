@@ -41,8 +41,10 @@ builder.Services.AddMvc().AddJsonOptions(o =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+//AutoMapper
 builder.Services.AddAutoMapper(typeof(OrganizationProfile));
 
+//這段是使用AutoFac的部分
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
